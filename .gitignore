@@ -1,0 +1,34 @@
+# Terraform
+**/.terraform/*
+**/.terragrunt-cache/*
+*.tfstate*
+.terraform.lock.*
+crash.log
+
+# Secrets are not allowed in general
+*.key
+*.pem
+
+# Secrets are encrypted using git-crypt
+!secrets/*
+
+# OS X
+.history
+.DS_Store
+
+# IntelliJ
+.idea_modules
+*.iml
+*.iws
+*.ipr
+.idea/
+build/
+*/build/
+
+# Temp files:
+*~
+*.swp
+.DS_Store
+
+# Files contain credentials info:
+/credentials.*
