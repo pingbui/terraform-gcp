@@ -1,9 +1,8 @@
 locals {
-  s_account_fmt = var.create_project_sa ? format(
-    "serviceAccount:%s",
-    module.project-factory.service_account_email,
-  ) : ""
-  members = var.create_project_sa ? concat(formatlist("user:%s", var.user_emails), [local.s_account_fmt]) : formatlist("user:%s", var.user_emails)
+  default_role  = try(var.iam_roles[0], "roles/viewer")
+  other_roles   = try(slice(var.iam_roles, 1, length(var.iam_roles)), [])
+  s_account_fmt = var.create_project_sa ? format("serviceAccount:%s", module.project-factory.service_account_email) : ""
+  members       = var.create_project_sa ? concat(formatlist("user:%s", var.user_emails), [local.s_account_fmt]) : formatlist("user:%s", var.user_emails)
 }
 
 module "project-factory" {
@@ -24,14 +23,14 @@ module "project-factory" {
   consumer_quotas    = var.consumer_quotas
   create_project_sa  = var.create_project_sa
   project_sa_name    = var.project_sa_name
-  sa_role            = var.sa_role
+  sa_role            = ""
 }
 
 resource "google_project_iam_member" "this" {
-  for_each = toset(var.user_emails)
+  for_each = toset(local.members)
   project  = var.project_id
-  role     = ""
-  member   = "user:${each.value}"
+  role     = local.default_role
+  member   = each.value
 
   dynamic "condition" {
     for_each = var.condition == {} ? [] : [1]
@@ -44,7 +43,7 @@ resource "google_project_iam_member" "this" {
 }
 
 resource "google_project_iam_binding" "this" {
-  for_each = toset(var.iam_roles)
+  for_each = toset(local.other_roles)
   project  = var.project_id
   role     = each.value
   members  = local.members
