@@ -65,7 +65,7 @@ resource "google_project_iam_binding" "sa" {
   for_each = var.create_project_sa ? toset(var.iam_roles) : []
   project  = var.project_id
   role     = each.value
-  members  = local.s_account_fmt
+  members  = [local.s_account_fmt]
 
   dynamic "condition" {
     for_each = var.condition == {} ? [] : [1]
