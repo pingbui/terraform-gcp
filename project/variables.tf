@@ -114,3 +114,9 @@ variable "condition" {
   type        = map(string)
   default     = {}
 }
+
+variable "create_sa_key" {
+  description = "Whether the key of default service account for the project shall be created"
+  type        = bool
+  default     = false
+}

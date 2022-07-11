@@ -62,7 +62,7 @@ resource "google_project_iam_binding" "this" {
 
 ## For service account:
 resource "google_project_iam_binding" "sa" {
-  for_each = toset(var.iam_roles)
+  for_each = var.create_project_sa ? toset(var.iam_roles) : []
   project  = var.project_id
   role     = each.value
   members  = local.s_account_fmt
@@ -75,4 +75,11 @@ resource "google_project_iam_binding" "sa" {
       expression  = try(var.condition.expression, "request.time < timestamp(\"2020-01-01T00:00:00Z\")")
     }
   }
+}
+
+resource "google_service_account_key" "sa_key" {
+  count              = var.create_project_sa && var.create_sa_key ? 1 : 0
+  service_account_id = module.project-factory.service_account_id
+  public_key_type    = "TYPE_X509_PEM_FILE"
+  private_key_type   = "TYPE_GOOGLE_CREDENTIALS_FILE"
 }

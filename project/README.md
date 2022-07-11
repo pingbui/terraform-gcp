@@ -21,6 +21,7 @@ No requirements.
 | [google_project_iam_binding.sa](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_binding) | resource |
 | [google_project_iam_binding.this](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_binding) | resource |
 | [google_project_iam_member.this](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_service_account_key.sa_key](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account_key) | resource |
 
 ## Inputs
 
@@ -31,6 +32,7 @@ No requirements.
 | <a name="input_condition"></a> [condition](#input\_condition) | The condition of roles | `map(string)` | `{}` | no |
 | <a name="input_consumer_quotas"></a> [consumer\_quotas](#input\_consumer\_quotas) | The quotas configuration you want to override for the project. | <pre>list(object({<br>    service    = string,<br>    metric     = string,<br>    dimensions = map(string),<br>    limit      = string,<br>    value      = string,<br>  }))</pre> | `[]` | no |
 | <a name="input_create_project_sa"></a> [create\_project\_sa](#input\_create\_project\_sa) | Whether the default service account for the project shall be created | `bool` | `true` | no |
+| <a name="input_create_sa_key"></a> [create\_sa\_key](#input\_create\_sa\_key) | Whether the key of default service account for the project shall be created | `bool` | `false` | no |
 | <a name="input_domain"></a> [domain](#input\_domain) | The domain name (optional). | `string` | `""` | no |
 | <a name="input_essential_contacts"></a> [essential\_contacts](#input\_essential\_contacts) | A mapping of users or groups to be assigned as Essential Contacts to the project, specifying a notification category | `map(list(string))` | `{}` | no |
 | <a name="input_folder_id"></a> [folder\_id](#input\_folder\_id) | The ID of a folder to host this project | `string` | `""` | no |
@@ -56,9 +58,11 @@ No requirements.
 | <a name="output_enabled_api_identities"></a> [enabled\_api\_identities](#output\_enabled\_api\_identities) | Enabled API identities in the project |
 | <a name="output_enabled_apis"></a> [enabled\_apis](#output\_enabled\_apis) | Enabled APIs in the project |
 | <a name="output_group_email"></a> [group\_email](#output\_group\_email) | The email of the G Suite group with group\_name |
+| <a name="output_private_key"></a> [private\_key](#output\_private\_key) | The private\_key of the default service account |
 | <a name="output_project_id"></a> [project\_id](#output\_project\_id) | n/a |
 | <a name="output_project_name"></a> [project\_name](#output\_project\_name) | n/a |
 | <a name="output_project_number"></a> [project\_number](#output\_project\_number) | n/a |
+| <a name="output_public_key"></a> [public\_key](#output\_public\_key) | The public\_key of the default service account |
 | <a name="output_service_account_display_name"></a> [service\_account\_display\_name](#output\_service\_account\_display\_name) | The display name of the default service account |
 | <a name="output_service_account_email"></a> [service\_account\_email](#output\_service\_account\_email) | The email of the default service account |
 | <a name="output_service_account_id"></a> [service\_account\_id](#output\_service\_account\_id) | The id of the default service account |
