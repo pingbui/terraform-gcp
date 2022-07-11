@@ -43,6 +43,24 @@ variable "group_role" {
   default     = "roles/editor"
 }
 
+variable "create_project_sa" {
+  description = "Whether the default service account for the project shall be created"
+  type        = bool
+  default     = true
+}
+
+variable "project_sa_name" {
+  description = "Default service account name for the project."
+  type        = string
+  default     = "project-service-account"
+}
+
+variable "sa_role" {
+  description = "A role to give the default Service Account for the project (defaults to none)"
+  type        = string
+  default     = ""
+}
+
 variable "activate_apis" {
   description = "The list of apis to activate within the project"
   type        = list(string)

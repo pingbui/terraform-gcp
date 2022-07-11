@@ -29,6 +29,7 @@ No requirements.
 | <a name="input_billing_account"></a> [billing\_account](#input\_billing\_account) | The ID of the billing account to associate this project with | `string` | n/a | yes |
 | <a name="input_condition"></a> [condition](#input\_condition) | The condition of roles | `map(string)` | `{}` | no |
 | <a name="input_consumer_quotas"></a> [consumer\_quotas](#input\_consumer\_quotas) | The quotas configuration you want to override for the project. | <pre>list(object({<br>    service    = string,<br>    metric     = string,<br>    dimensions = map(string),<br>    limit      = string,<br>    value      = string,<br>  }))</pre> | `[]` | no |
+| <a name="input_create_project_sa"></a> [create\_project\_sa](#input\_create\_project\_sa) | Whether the default service account for the project shall be created | `bool` | `true` | no |
 | <a name="input_domain"></a> [domain](#input\_domain) | The domain name (optional). | `string` | `""` | no |
 | <a name="input_essential_contacts"></a> [essential\_contacts](#input\_essential\_contacts) | A mapping of users or groups to be assigned as Essential Contacts to the project, specifying a notification category | `map(list(string))` | `{}` | no |
 | <a name="input_folder_id"></a> [folder\_id](#input\_folder\_id) | The ID of a folder to host this project | `string` | `""` | no |
@@ -40,6 +41,8 @@ No requirements.
 | <a name="input_name"></a> [name](#input\_name) | The name for the project | `string` | n/a | yes |
 | <a name="input_org_id"></a> [org\_id](#input\_org\_id) | The organization ID. | `string` | n/a | yes |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | The ID to give the project. If not provided, the `name` will be used. | `string` | `""` | no |
+| <a name="input_project_sa_name"></a> [project\_sa\_name](#input\_project\_sa\_name) | Default service account name for the project. | `string` | `"project-service-account"` | no |
+| <a name="input_sa_role"></a> [sa\_role](#input\_sa\_role) | A role to give the default Service Account for the project (defaults to none) | `string` | `""` | no |
 | <a name="input_user_emails"></a> [user\_emails](#input\_user\_emails) | List of user emails | `list(string)` | `[]` | no |
 
 ## Outputs

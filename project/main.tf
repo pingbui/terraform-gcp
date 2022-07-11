@@ -19,6 +19,9 @@ module "project-factory" {
   group_role         = var.group_role
   essential_contacts = var.essential_contacts
   consumer_quotas    = var.consumer_quotas
+  create_project_sa  = var.create_project_sa
+  project_sa_name    = var.project_sa_name
+  sa_role            = var.sa_role
 }
 
 resource "google_project_iam_member" "this" {
