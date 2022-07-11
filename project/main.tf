@@ -1,6 +1,4 @@
 locals {
-  default_role = try(var.iam_roles[0], [])
-  other_roles  = try(slice(var.iam_roles, 1, length(var.iam_roles)), [])
   s_account_fmt = var.create_project_sa ? format(
     "serviceAccount:%s",
     module.project-factory.service_account_email,
@@ -26,13 +24,13 @@ module "project-factory" {
   consumer_quotas    = var.consumer_quotas
   create_project_sa  = var.create_project_sa
   project_sa_name    = var.project_sa_name
-  sa_role            = var.create_project_sa ? local.default_role : ""
+  sa_role            = var.sa_role
 }
 
 resource "google_project_iam_member" "this" {
   for_each = toset(var.user_emails)
   project  = var.project_id
-  role     = local.default_role
+  role     = ""
   member   = "user:${each.value}"
 
   dynamic "condition" {
@@ -46,7 +44,7 @@ resource "google_project_iam_member" "this" {
 }
 
 resource "google_project_iam_binding" "this" {
-  for_each = toset(local.other_roles)
+  for_each = toset(var.iam_roles)
   project  = var.project_id
   role     = each.value
   members  = local.members
