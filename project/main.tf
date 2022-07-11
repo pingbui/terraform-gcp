@@ -79,7 +79,7 @@ resource "google_project_iam_binding" "sa" {
 
 resource "google_service_account_key" "sa_key" {
   count              = var.create_project_sa && var.create_sa_key ? 1 : 0
-  service_account_id = module.project-factory.service_account_id
+  service_account_id = module.project-factory.service_account_name
   public_key_type    = "TYPE_X509_PEM_FILE"
   private_key_type   = "TYPE_GOOGLE_CREDENTIALS_FILE"
 }
