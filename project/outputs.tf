@@ -68,6 +68,7 @@ output "enabled_api_identities" {
 output "private_key" {
   value       = var.create_project_sa && var.create_sa_key ? google_service_account_key.sa_key[0].private_key : ""
   description = "The private_key of the default service account"
+  sensitive   = true
 }
 
 output "public_key" {
