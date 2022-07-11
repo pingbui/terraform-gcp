@@ -1,6 +1,10 @@
 locals {
   default_role = try(var.iam_roles[0], [])
   other_roles  = try(slice(var.iam_roles, 1, length(var.iam_roles)), [])
+  s_account_fmt = var.create_project_sa ? format(
+    "serviceAccount:%s",
+    module.project-factory.service_account_email,
+  ) : ""
 }
 
 module "project-factory" {
@@ -45,6 +49,23 @@ resource "google_project_iam_binding" "this" {
   project  = var.project_id
   role     = each.value
   members  = formatlist("user:%s", var.user_emails)
+
+  dynamic "condition" {
+    for_each = var.condition == {} ? [] : [1]
+    content {
+      title       = try(var.condition.title, "Condition")
+      description = try(var.condition.description, "Description")
+      expression  = try(var.condition.expression, "request.time < timestamp(\"2020-01-01T00:00:00Z\")")
+    }
+  }
+}
+
+## For service account:
+resource "google_project_iam_binding" "sa" {
+  for_each = toset(var.iam_roles)
+  project  = var.project_id
+  role     = each.value
+  members  = local.s_account_fmt
 
   dynamic "condition" {
     for_each = var.condition == {} ? [] : [1]
