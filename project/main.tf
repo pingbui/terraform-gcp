@@ -5,6 +5,7 @@ locals {
     "serviceAccount:%s",
     module.project-factory.service_account_email,
   ) : ""
+  members = var.create_project_sa ? concat(formatlist("user:%s", var.user_emails), [local.s_account_fmt]) : formatlist("user:%s", var.user_emails)
 }
 
 module "project-factory" {
@@ -25,7 +26,7 @@ module "project-factory" {
   consumer_quotas    = var.consumer_quotas
   create_project_sa  = var.create_project_sa
   project_sa_name    = var.project_sa_name
-  sa_role            = var.sa_role
+  sa_role            = var.create_project_sa ? local.default_role : ""
 }
 
 resource "google_project_iam_member" "this" {
@@ -48,7 +49,7 @@ resource "google_project_iam_binding" "this" {
   for_each = toset(local.other_roles)
   project  = var.project_id
   role     = each.value
-  members  = formatlist("user:%s", var.user_emails)
+  members  = local.members
 
   dynamic "condition" {
     for_each = var.condition == {} ? [] : [1]
@@ -61,22 +62,6 @@ resource "google_project_iam_binding" "this" {
 }
 
 ## For service account:
-resource "google_project_iam_binding" "sa" {
-  for_each = var.create_project_sa ? toset(var.iam_roles) : []
-  project  = var.project_id
-  role     = each.value
-  members  = [local.s_account_fmt]
-
-  dynamic "condition" {
-    for_each = var.condition == {} ? [] : [1]
-    content {
-      title       = try(var.condition.title, "Condition")
-      description = try(var.condition.description, "Description")
-      expression  = try(var.condition.expression, "request.time < timestamp(\"2020-01-01T00:00:00Z\")")
-    }
-  }
-}
-
 resource "google_service_account_key" "sa_key" {
   count              = var.create_project_sa && var.create_sa_key ? 1 : 0
   service_account_id = module.project-factory.service_account_name
